@@ -25,7 +25,7 @@ struct Path
 
     Path() { }
 
-    Path(int to, int64_t cost, bool forward) : to(to), cost(cost), forward(forward) { }
+    Path(int to, int64_t cost) : to(to), cost(cost) { }
 
     void set(int p_from, int p_flow, int64_t p_cost, bool p_forward)
     {
@@ -118,45 +118,46 @@ bool augmenting(std::vector<Vertex>& vertices, std::vector<Path>& path)
 {
     std::priority_queue<Path> queue;
     std::vector<int64_t> costs(vertices.size(), std::numeric_limits<int64_t>::max());
-    queue.emplace(S, 0.0, true);
+    queue.emplace(S, 0.0);
     costs[S] = 0;
 
     while (!queue.empty())
     {
-        auto current = queue.top();
+        auto current = queue.top().to;
         queue.pop();
 
-        if (costs[current.to] < 0)
+        if (costs[current] < 0)
         {
             continue;
         }
-        if (current.to == T)
+        if (current == T)
         {
             return true;
         }
-        costs[current.to] = -1;
 
-        for (auto& edge : vertices[current.to].forward)
+        for (auto& edge : vertices[current].forward)
         {
-            auto cost = current.cost + edge.cost;
+            auto cost = costs[current] + edge.cost;
             if (edge.capacity > edge.flow && costs[edge.to] > cost)
             {
                 costs[edge.to] = cost;
-                queue.emplace(edge.to, cost, true);
-                path[edge.to].set(current.to, edge.capacity - edge.flow, edge.cost, true);
+                queue.emplace(edge.to, cost);
+                path[edge.to].set(current, edge.capacity - edge.flow, edge.cost, true);
             }
         }
 
-        for (auto& edge : vertices[current.to].backward)
+        for (auto& edge : vertices[current].backward)
         {
-            auto cost = current.cost - edge.cost;
+            auto cost = costs[current] - edge.cost;
             if (edge.flow > 0 && costs[edge.to] > cost)
             {
                 costs[edge.to] = cost;
-                queue.emplace(edge.to, cost, false);
-                path[edge.to].set(current.to, edge.flow, edge.cost, false);
+                queue.emplace(edge.to, cost);
+                path[edge.to].set(current, edge.flow, edge.cost, false);
             }
         }
+
+        costs[current] = -1;
     }
     return false;
 }
