@@ -1,3 +1,10 @@
+/*
+ * HackerRank - Kruskal (MST): Really Special Subtree
+ * Graphs
+ * https://www.hackerrank.com/challenges/kruskalmstrsub
+ * Author: Rafal Kozik
+ */
+
 #include <iostream>
 #include <vector>
 #include <queue>
