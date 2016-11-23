@@ -5,44 +5,54 @@
  * Author: Rafal Kozik
  */
 
-#include "gtest/gtest.h"
 #include <iostream>
 #include <vector>
 #include <limits>
 
 #define LOG(x) std::cout << x << std::endl;
 
-int sth(int n, std::vector<int>& v, std::vector<int>& coins)
+/*
+ *        {1,2,3},4
+ *        /       \
+ *   {1,2},4     {1,2,3},(4-3=1)
+ *   /     \          ....
+ * {1},4  {1,2},2
+ *  ...   /     \
+ *     {1},2   ({1,2},0)=1
+ *      ...
+ */
+
+
+uint64_t change(int amount, int n, const std::vector<int>& coins, std::vector<std::vector<uint64_t>>& cache)
 {
-    if (n < 0)
+    // There is always one solution when amount is equal to 0 - do not include any coins
+    if (amount == 0)
     {
-        return std::numeric_limits<int>::max();
+        return 1;
     }
-    if (v[n] >= 0)
+    if (n <= 0 || amount < 0)
     {
-        return v[n];
+        return 0;
     }
-    int min = std::numeric_limits<int>::max();
-    for (auto coin : coins)
+    if (cache[amount][n] == std::numeric_limits<uint64_t>::max())
     {
-        int s = sth(n - coin, v, coins);
-        if (s < min - 1)
-        {
-            min = s + 1;
-        }
+        // Solutions without n-th coin plus solutions with at least one n-th coin
+        cache[amount][n] = change(amount, n - 1, coins, cache) + change(amount - coins[n - 1], n, coins, cache);
     }
-    v[n] = min;
-    return v[n];
+    return cache[amount][n];
 }
 
-TEST(Coins, Test)
+int main()
 {
-    std::vector<int> coins1{1, 3, 5};
-    std::vector<int> coins2{3, 5};
-    std::vector<int> v(11 + 1, -1);
-    v[0] = 0;
-    EXPECT_EQ(3, sth(11, v, coins1));
-    std::vector<int> v1(11 + 1, -1);
-    v1[0] = 0;
-    EXPECT_EQ(3, sth(11, v1, coins2));
+    std::ios::sync_with_stdio(false);
+    int N = 0, M = 0;
+    std::cin >> N >> M;
+    std::vector<int> coins(M, 0);
+    std::vector<std::vector<uint64_t>> cache(N + 1, std::vector<uint64_t>(M + 1, std::numeric_limits<uint64_t>::max()));
+    for (int i = 0; i < M; ++i)
+    {
+        std::cin >> coins[i];
+    }
+    LOG(change(N, M, coins, cache));
+    return 0;
 }
