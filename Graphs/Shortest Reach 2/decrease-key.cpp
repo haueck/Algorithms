@@ -149,42 +149,37 @@ int main(int argc, char **argv)
         }
 
         std::cin >> S;
-
-        for (int i = 0; i < N; ++i)
+        MinHeap queue(N);
+        queue.decrease(S - 1, 0);
+        std::vector<int> distances(N, -1);
+        while (!queue.empty())
         {
-            if (i == S - 1)
+            auto smallest = queue.smallest();
+            if (smallest.key == std::numeric_limits<int>::max())
             {
-                continue;
+                break;
             }
-            MinHeap queue(N);
-            queue.decrease(S - 1, 0);
-
-            while (!queue.empty())
+            for (auto edge : vertices[smallest.pos].edges)
             {
-                auto smallest = queue.smallest();
-                if (smallest.key == std::numeric_limits<int>::max())
+                int distance = smallest.key + edge.distance;
+                if (queue.key(edge.to) > distance)
                 {
-                    std::cout << "-1 ";
-                    break;
-                }
-                if (smallest.pos == i)
-                {
-                    std::cout << smallest.key << " ";
-                    break;
-                }
-                for (auto edge : vertices[smallest.pos].edges)
-                {
-                    int distance = smallest.key + edge.distance;
-                    if (queue.key(edge.to) > distance)
-                    {
-                        queue.decrease(edge.to, distance);
-                    }
+                    distances[edge.to] = distance;
+                    queue.decrease(edge.to, distance);
                 }
             }
         }
+
+        for (int i = 0; i < N; ++i)
+        {
+            if (i != S - 1)
+            {
+                std::cout << distances[i] << " ";
+            }
+        }
+
         std::cout << std::endl;
     }
-
     return 0;
 }
 

@@ -48,50 +48,38 @@ int main(int argc, char **argv)
         }
 
         std::cin >> S;
+        std::vector<int> distances(N, std::numeric_limits<int>::max());
+        std::priority_queue<Distance> queue;
+        queue.emplace(S - 1, 0);
 
-        for (int i = 0; i < N; ++i)
+        while (!queue.empty())
         {
-            if (i == S - 1)
+            auto current = queue.top();
+            queue.pop();
+            if (current.distance > distances[current.to])
             {
                 continue;
             }
-            std::vector<int> distances(N, std::numeric_limits<int>::max());
-            std::priority_queue<Distance> queue;
-            queue.emplace(S - 1, 0);
-
-            while (true)
+            for (auto edge : vertices[current.to].edges)
             {
-                auto current = queue.top();
-                queue.pop();
-                if (distances[current.to] < 0)
+                int distance = current.distance + edge.distance;
+                if (distances[edge.to] > distance)
                 {
-                    continue;
+                    distances[edge.to] = distance;
+                    queue.emplace(edge.to, distance);
                 }
-                if (current.to == i)
-                {
-                    std::cout << current.distance << " ";
-                    break;
-                }
-                distances[current.to] = -1;
-                for (auto edge : vertices[current.to].edges)
-                {
-                    int distance = current.distance + edge.distance;
-                    if (distances[edge.to] > distance)
-                    {
-                        distances[edge.to] = distance;
-                        queue.emplace(edge.to, distance);
-                    }
-                }
-                if (queue.empty())
-                {
-                    std::cout << "-1 ";
-                    break;
-                }
+            }
+        }
+
+        for (int i = 0; i < N; ++i)
+        {
+            if (i != S - 1)
+            {
+                std::cout << (distances[i] == std::numeric_limits<int>::max() ? -1 : distances[i]) << " ";
             }
         }
         std::cout << std::endl;
     }
-
     return 0;
 }
 
