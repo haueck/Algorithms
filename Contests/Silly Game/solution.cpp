@@ -10,18 +10,18 @@
 
 #define LOG(x) std::cout << x << std::endl;
 
-void sift(std::vector<bool>& sieve)
+void sift(std::vector<bool>& primes)
 {
     int i = 0;
-    int is = 0;;
-    int size = sieve.size();
+    int is = 3;
+    int size = primes.size();
     while (is < size)
     {
-        if (sieve[i])
+        if (primes[i])
         {
             for (int j = is; j < size; j += i + i + 3)
             {
-                sieve[j] = false;
+                primes[j] = false;
             }
         }
         ++i;
@@ -34,8 +34,8 @@ int main(int argc, char **argv)
     std::ios::sync_with_stdio(false);
     int T;
     std::cin >> T;
-    std::vector<bool> sieve(100001 / 2, true);
-    sift(sieve);
+    std::vector<bool> primes(100001 / 2, true);
+    sift(primes);
     for (int t = 0; t < T; ++t)
     {
         int N;
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
         int count = N > 1 ? 1 : 0;
         for (int i = 0; i + i + 3 <= N; ++i)
         {
-            if (sieve[i])
+            if (primes[i])
             {
                 ++count;
             }
