@@ -27,22 +27,18 @@ void graph_to_tree(std::vector<std::vector<int>>& graph, std::vector<std::vector
 
 int64_t count_subtrees(std::vector<std::vector<int>>& tree, int current, int children, int cuts, bool current_included)
 {
-    if (cuts < 0)
+    if (cuts == 0)
     {
-        return 0;
+        // This function count subtrees with exactly 'cuts' number of cuts between a subtree and a remaining graph.
+        // There are two cases when we run out of cuts. First - the current node is included in the subtree.
+        // Then we return 1, because there is 1 valid subtree including all descendants of the current node.
+        // In the second case, the current node is not included. And we also return 1, indicating that in this
+        // case we can only create 1 valid subtree with no nodes (empty set).
+        return 1;
     }
     if (children == 0)
     {
-        if (cuts == 0)
-        {
-            // This function count subtrees with exactly 'cuts' number of cuts between a subtree and a remaining graph.
-            // So when we reach a leaf, the number of 'cuts' has to be 0.
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
     if (dp[current][children][cuts][current_included] == -1)
     {
@@ -57,13 +53,6 @@ int64_t count_subtrees(std::vector<std::vector<int>>& tree, int current, int chi
             {
                 count += count_subtrees(tree, current, children - 1, cuts - i, true) * count_subtrees(tree, last_child, tree[last_child].size(), i, true);
             }
-        }
-        else if (cuts == 0)
-        {
-            // If this node is not included and we have no more cuts available, we won't be able to include any of its descendands.
-            // This is because including a child while its parent is not included, means cutting an edge between them.
-            // We return 1 saying that in this is case we can only create one empty set.
-            count = 1;
         }
         else
         {
