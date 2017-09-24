@@ -53,6 +53,23 @@ int main()
         std::vector<int64_t> stable_walls(M + 1);
         std::vector<int64_t> all_walls = calculate_all_walls(M, N);
         stable_walls[1] = 1;
+        /*
+         * A(X) - number of ways to build a wall of length X
+         * S(Y) - number of solid walls of length Z
+         * P(Z) - number of ways to build a wall with a crack in Y
+         * P(Z1^Z2) - number of wall with a crack in Z1 and Z2
+         * P(Z1vZ2) - number of wall with a crack in Z1 or in Z2
+         * We use inclusion-exclusion principle to calculate P(Z1vZ2)
+         * 
+         * Wall of length 1
+         * S(1) = A(1)
+         * Wall of length 2
+         * S(2) = A(2) - P(1) = A(2) - A(1)*A(1)
+         * Wall of length 3
+         * S(3) = A(3) - P(1v2) = A(3) - [P(1) + P(2) - P(1^2)] = A(3) - [A(1)A(2) + A(2)A(1) - A(1)A(1)A(1)] =
+         *      = A(3) - [A(1)A(2) + [A(2) - A(1)A(1)]A(1)] = A(3) - [S(1)A(2) + S(2)A(1)]
+         * S(Y) = A(Y) - sum(L = 1 .. Y - 1)[S(L)A(Y - L)]
+         */
         for (int i = 2; i <= M; ++i)
         {
             stable_walls[i] = all_walls[i];
