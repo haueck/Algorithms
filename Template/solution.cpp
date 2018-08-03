@@ -4,8 +4,7 @@
  * Author: Rafal Kozik
  */
 
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
 #define LOG(x) std::cout << x << std::endl
 
