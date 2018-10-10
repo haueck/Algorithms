@@ -1,7 +1,6 @@
 /*
  * HackerRank - Swap Nodes
- * Trees
- * https://www.hackerrank.com/challenges/swap-nodes-algo
+ * https://www.hackerrank.com/challenges/swap-nodes-algo/problem
  * Author: Rafal Kozik
  */
 
