@@ -1,7 +1,6 @@
 /*
  * HackerRank - The Maximum Subarray
- * Arrays
- * https://www.hackerrank.com/challenges/maxsubarray
+ * https://www.hackerrank.com/challenges/maxsubarray/problem
  * Author: Rafal Kozik
  */
 
