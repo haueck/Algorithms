@@ -1,6 +1,6 @@
 /*
- *
- *
+ * HackerRank - Queries with Fixed Length
+ * https://www.hackerrank.com/challenges/queries-with-fixed-length/problem
  * Author: Rafal Kozik
  */
 
@@ -37,7 +37,7 @@ int main()
             {
                 max_heap.pop();
             }
-            min_heap.push(max_heap.top().first);            
+            min_heap.push(max_heap.top().first);
         }
         LOG(min_heap.top());
     }
