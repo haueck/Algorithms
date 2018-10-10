@@ -1,7 +1,6 @@
 /*
- * HackerRank - Find Median
- * Heaps
- * https://www.hackerrank.com/challenges/find-median-1
+ * HackerRank - Find the Running Median
+ * https://www.hackerrank.com/challenges/find-the-running-median/problem
  * Author: Rafal Kozik
  */
 
