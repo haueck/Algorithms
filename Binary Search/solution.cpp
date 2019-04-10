@@ -170,8 +170,24 @@ TEST(Greater, Outside) {
     EXPECT_EQ(greater(data, 15), 5);
 }
 
-TEST(LowerBound, Outside) {
+TEST(LowerBound, LowerBound) {
     std::vector<int> data{ 1, 3, 3, 3, 3, 7 };
-    EXPECT_EQ(greater_or_equal(data, 4), 0);
+    EXPECT_EQ(greater_or_equal(data, 1), 0);
+    EXPECT_EQ(greater_or_equal(data, 2), 1);
+    EXPECT_EQ(greater_or_equal(data, 3), 1);
+    EXPECT_EQ(greater_or_equal(data, 4), 5);
+    EXPECT_EQ(greater_or_equal(data, 7), 5);
+    EXPECT_EQ(greater_or_equal(data, 9), 6);
+}
+
+TEST(UpperBound, UpperBound) {
+    std::vector<int> data{ 1, 3, 3, 3, 3, 7 };
+    EXPECT_EQ(lower_or_equal(data, 0), -1);
+    EXPECT_EQ(lower_or_equal(data, 1), 0);
+    EXPECT_EQ(lower_or_equal(data, 2), 0);
+    EXPECT_EQ(lower_or_equal(data, 3), 4);
+    EXPECT_EQ(lower_or_equal(data, 4), 4);
+    EXPECT_EQ(lower_or_equal(data, 7), 5);
+    EXPECT_EQ(lower_or_equal(data, 9), 5);
 }
 
